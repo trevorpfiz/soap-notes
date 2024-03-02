@@ -6,7 +6,7 @@ import { useChat } from "ai/react";
 import { TAddOptimistic } from "~/app/(app)/notes/useOptimisticNotes";
 import GenerateForm from "~/components/notes/generate-form";
 import NoteForm from "~/components/notes/NoteForm";
-import Tiptap from "~/components/notes/tiptap";
+import TailwindEditor from "~/components/notes/novel/editor";
 import Modal from "~/components/shared/Modal";
 import { Button } from "~/components/ui/button";
 import { type Note } from "~/lib/db/schema/notes";
@@ -62,7 +62,7 @@ export default function OptimisticNote({ note }: { note: Note }) {
           optimisticNote.id === "optimistic" ? "animate-pulse" : "",
         )}
       >
-        <Tiptap messages={messages} />
+        <TailwindEditor messages={messages} />
         <ul>
           {messages.map((m, index) => (
             <li key={index}>
