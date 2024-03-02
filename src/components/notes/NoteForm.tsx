@@ -133,6 +133,27 @@ const NoteForm = ({
           <div className="h-6" />
         )}
       </div>
+      <div>
+        <Label
+          className={cn(
+            "mb-2 inline-block",
+            errors?.content ? "text-destructive" : "",
+          )}
+        >
+          Content
+        </Label>
+        <Input
+          type="text"
+          name="content"
+          className={cn(errors?.content ? "ring ring-destructive" : "")}
+          defaultValue={note?.content ?? ""}
+        />
+        {errors?.content ? (
+          <p className="mt-2 text-xs text-destructive">{errors.content[0]}</p>
+        ) : (
+          <div className="h-6" />
+        )}
+      </div>
       {/* Schema fields end */}
 
       {/* Save Button */}

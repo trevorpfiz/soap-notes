@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
+import { EditorRoot } from "novel";
 
 import Loading from "~/app/loading";
 import { BackButton } from "~/components/shared/BackButton";
@@ -31,7 +32,9 @@ const Note = async ({ id }: { id: string }) => {
     <Suspense fallback={<Loading />}>
       <div className="relative">
         <BackButton currentResource="notes" />
-        <OptimisticNote note={note} />
+        <EditorRoot>
+          <OptimisticNote note={note} />
+        </EditorRoot>
       </div>
     </Suspense>
   );

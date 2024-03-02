@@ -12,8 +12,8 @@ export const notes = pgTable("notes", {
     .$defaultFn(() => nanoid()),
   name: varchar("name", { length: 256 }).notNull(),
   content: text("content"),
-
   userId: varchar("user_id", { length: 256 }).notNull(),
+
   createdAt: timestamp("created_at")
     .notNull()
     .default(sql`now()`),

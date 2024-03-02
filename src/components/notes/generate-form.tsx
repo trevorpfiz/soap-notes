@@ -49,3 +49,4 @@ const GenerateForm = (props: GenerateFormProps) => {
 export default GenerateForm;
 
 // can you generate a sample SOAP note?
+// what color is a banana?
