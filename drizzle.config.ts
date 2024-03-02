@@ -1,4 +1,5 @@
 import type { Config } from "drizzle-kit";
+
 import { env } from "~/lib/env.mjs";
 
 export default {
@@ -7,5 +8,5 @@ export default {
   driver: "pg",
   dbCredentials: {
     connectionString: env.DATABASE_URL,
-  }
+  },
 } satisfies Config;

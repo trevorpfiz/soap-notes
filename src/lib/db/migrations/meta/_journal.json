@@ -8,6 +8,20 @@
       "when": 1709340163677,
       "tag": "0000_charming_richard_fisk",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1709364419334,
+      "tag": "0001_lying_kid_colt",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1709367751983,
+      "tag": "0002_low_hobgoblin",
+      "breakpoints": true
     }
   ]
 }
