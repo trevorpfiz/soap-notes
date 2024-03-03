@@ -1,8 +1,8 @@
 "use client";
 
+import type { EditorInstance } from "novel";
 import { useEffect, useOptimistic, useState } from "react";
-import { useChat } from "ai/react";
-import { useEditor } from "novel";
+import { useCompletion } from "ai/react";
 
 import { TAddOptimistic } from "~/app/(app)/notes/useOptimisticNotes";
 import GenerateForm from "~/components/notes/generate-form";
@@ -23,31 +23,37 @@ export default function OptimisticNote({ note }: { note: Note }) {
   const updateNote: TAddOptimistic = (input) =>
     setOptimisticNote({ ...input.data });
 
-  const { editor } = useEditor();
   const [openGenerate, setOpenGenerate] = useState(false);
-  const { messages, input, handleInputChange, handleSubmit } = useChat({
+  const [editorInstance, setEditorInstance] = useState<EditorInstance | null>(
+    null,
+  );
+  const { completion, input, handleInputChange, handleSubmit } = useCompletion({
     api: "/api/generate",
+    onFinish: (prompt, completion) => {
+      // This function gets called when the completion stream ends
+      if (editorInstance) {
+        // Insert the completion content into the editor
+        const content = `${completion}\n`; // Adjust this line as needed
+        editorInstance.commands.insertContent(content);
+      }
+    },
   });
 
-  useEffect(() => {
-    // This will run every time the 'messages' array changes, i.e., when new messages are streamed in.
-    console.log(editor, "editor");
-    console.log(messages, "messages");
-    editor &&
-      messages.forEach((message) => {
-        // Construct the content based on message type and content
-        let content;
-        if (message.role === "user") {
-          content = `User: ${message.content}`;
-        } else {
-          content = `AI: ${message.content}`;
-        }
+  const handleEditorCreate = (editor: EditorInstance) => {
+    setEditorInstance(editor);
+  };
 
-        // Insert content into the editor. You might need to modify this depending on how your messages are structured and how you want them to appear.
-        // For simplicity, I'm inserting plain text here, but you could insert HTML or JSON depending on your needs and editor capabilities.
-        editor.commands.insertContent(content); // Adding a newline for separation between messages
-      });
-  }, [messages, editor]); // Re-run the effect if 'messages' or 'editor' changes
+  // FIXME: need to figure out how to write stream to editor
+  // useEffect(() => {
+  //   if (editorInstance && completion) {
+  //     if (typeof completion === "string") {
+  //       const content = `${completion}\n`;
+  //       editorInstance.commands.insertContentAt(0, content);
+  //     } else {
+  //       console.warn("Completion content is not a string:", completion);
+  //     }
+  //   }
+  // }, [completion, editorInstance]);
 
   return (
     <div className="m-4">
@@ -84,15 +90,8 @@ export default function OptimisticNote({ note }: { note: Note }) {
           optimisticNote.id === "optimistic" ? "animate-pulse" : "",
         )}
       >
-        <TailwindEditor />
-        <ul>
-          {messages.map((m, index) => (
-            <li key={index}>
-              {m.role === "user" ? "User: " : "AI: "}
-              {m.content}
-            </li>
-          ))}
-        </ul>
+        <TailwindEditor onCreate={handleEditorCreate} note={note} />
+        <p>{completion}</p>
       </pre>
     </div>
   );
